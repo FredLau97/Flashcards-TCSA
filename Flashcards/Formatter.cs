@@ -59,7 +59,7 @@ namespace Flashcards
 
             foreach (var card in flashcards)
             {
-                tableData.Add(new List<object> { card.FlashcardID, card.CardFront, card.CardBack });
+                tableData.Add(new List<object> { card.DisplayID, card.CardFront, card.CardBack });
             }
 
             ConsoleTableBuilder

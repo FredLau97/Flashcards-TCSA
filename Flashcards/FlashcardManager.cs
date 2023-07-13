@@ -156,7 +156,7 @@ namespace Flashcards
         private void DeleteFlashcard(StackDTO stack)
         {
             var flashcardsInStack = GetFlashcards(stack);
-            var flashcardIDs = flashcardsInStack.Select(flashcard => flashcard.FlashcardID).ToArray();
+            var flashcardIDs = flashcardsInStack.Select(flashcard => flashcard.DisplayID).ToArray();
             Console.WriteLine("Which flashcard (ID) would you like to delete?");
             var flashcardID = _inputHandler.GetNumericInput(flashcardIDs);
             Console.WriteLine($"Are you sure you want to delete this flashcard ({flashcardID})? Y/N");
@@ -177,9 +177,10 @@ namespace Flashcards
         private void EditFlashcard(StackDTO stack)
         {
             var flashcardsInStack = GetFlashcards(stack);
-            var flashcardIDs = flashcardsInStack.Select(flashcard => flashcard.FlashcardID).ToArray();
+            var flashcardIDs = flashcardsInStack.Select(flashcard => flashcard.DisplayID).ToArray();
             Console.WriteLine("Which flashcard (ID) would you like to edit?");
-            var flashcardID = _inputHandler.GetNumericInput(flashcardIDs);
+            var flashcardDisplayID = _inputHandler.GetNumericInput(flashcardIDs);
+            var flashcardID = flashcardsInStack.Where(flashcard => flashcard.DisplayID == flashcardDisplayID).Select(flashcard => flashcard.FlashcardID).FirstOrDefault();
             var flashcard = CreateFlashcardData();
             flashcard.FlashcardID = flashcardID;
             var dataAccess = new DataAccess();

@@ -134,7 +134,6 @@ namespace Flashcards
             return stack;
         }
 
-        // TODO: Implement this method
         public void DeleteStack(int stackId)
         {
             if (!OpenConnection()) return;
@@ -171,13 +170,15 @@ namespace Flashcards
             _cmd = new(_sql, _connection);
             var reader = _cmd.ExecuteReader();
             var cards = new List<FlashcardDTO>();
+            var iterator = 1;
 
             while (reader.Read())
             {
+                var displayID = iterator++;
                 var cardId = reader.GetInt32(0);
                 var cardFront = reader.GetString(1);
                 var cardBack = reader.GetString(2);
-                var card = new FlashcardDTO(cardId, cardFront, cardBack);
+                var card = new FlashcardDTO(displayID, cardId, cardFront, cardBack);
                 cards.Add(card);
             }
 
