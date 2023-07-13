@@ -144,10 +144,45 @@ namespace Flashcards
 
         private void EditFlashcard(StackDTO stack)
         {
-            throw new NotImplementedException();
+            var flashcardsInStack = GetFlashcards(stack);
+            var flashcardIDs = flashcardsInStack.Select(flashcard => flashcard.FlashcardID).ToArray();
+            Console.WriteLine("Which flashcard (ID) would you like to edit?");
+            var flashcardID = _inputHandler.GetNumericInput(flashcardIDs);
+            var flashcard = CreateFlashcardData();
+            flashcard.FlashcardID = flashcardID;
+            var dataAccess = new DataAccess();
+            dataAccess.EditFlashcard(flashcard);
+            InteractWithStack(stack);
+        }
+
+        private List<FlashcardDTO> GetFlashcards(StackDTO stack)
+        {
+            var dataAccess = new DataAccess();
+            var flashcardsInStack = dataAccess.GetCardsInStack(stack);
+
+            if (flashcardsInStack.Count == 0)
+            {
+                Console.WriteLine("There are currently no flashcards in this stack.");
+                InteractWithStack(stack);
+                return null;
+            }
+
+            Formatter.FormatFlashcardDTO(flashcardsInStack);
+            return flashcardsInStack;
         }
 
         private void CreateFlashcard(StackDTO stack)
+        {
+            var flashCard = CreateFlashcardData();
+
+            var dataAccess = new DataAccess();
+            dataAccess.CreateFlashcard(flashCard, stack);
+            Console.WriteLine("Flashcard created successfully.");
+
+            InteractWithStack(stack);
+        }
+
+        private FlashcardDTO CreateFlashcardData()
         {
             var cardFront = _inputHandler.GetTextInput("\nEnter the question for the flashcard: ");
             var cardBack = _inputHandler.GetTextInput("Enter the answer for the flashcard: ");
@@ -156,12 +191,7 @@ namespace Flashcards
                 CardFront = cardFront,
                 CardBack = cardBack,
             };
-
-            var dataAccess = new DataAccess();
-            dataAccess.CreateFlashcard(flashCard, stack);
-            Console.WriteLine("Flashcard created successfully.");
-
-            InteractWithStack(stack);
+            return flashCard;
         }
 
         private void ViewStack(StackDTO stack)

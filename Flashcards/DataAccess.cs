@@ -53,5 +53,10 @@ namespace Flashcards
             var cards = _connection.GetCardsInStack(stack);
             return cards;
         }
+
+        internal void EditFlashcard(FlashcardDTO flashcard)
+        {
+            _connection.EditFlashcard(flashcard);
+        }
     }
 }

@@ -171,5 +171,15 @@ namespace Flashcards
             CloseConnection();
             return cards;
         }
+
+        public void EditFlashcard(FlashcardDTO flashcard)
+        {
+            if (!OpenConnection()) return;
+
+            _sql = $"UPDATE Cards SET CardFront = '{flashcard.CardFront}', CardBack = '{flashcard.CardBack}' WHERE CardID = {flashcard.FlashcardID}";
+            _cmd = new(_sql, _connection);
+            _cmd.ExecuteNonQuery();
+            CloseConnection();
+        }
     }
 }
