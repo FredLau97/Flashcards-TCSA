@@ -138,6 +138,19 @@ namespace Flashcards
         public void DeleteStack(int stackId)
         {
             if (!OpenConnection()) return;
+
+            DeleteCardsInStack(stackId);
+            _sql = $"DELETE FROM Stacks WHERE StackID = {stackId}";
+            _cmd = new(_sql, _connection);
+            _cmd.ExecuteNonQuery();
+            CloseConnection();
+        }
+
+        private void DeleteCardsInStack(int stackId)
+        {
+            _sql = $"DELETE FROM Cards WHERE StackID = {stackId}";
+            _cmd = new(_sql, _connection);
+            _cmd.ExecuteNonQuery();
         }
 
         public void CreateFlashcard(FlashcardDTO flashCard, StackDTO stack)
