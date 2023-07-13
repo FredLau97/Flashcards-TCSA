@@ -38,11 +38,20 @@ namespace Flashcards
                 return;
             }
 
-            Console.WriteLine("Which stack (ID) would you like to interact with?");
+            Console.WriteLine("Which stack would you like to interact with? (Type N to create a new stack)");
             Formatter.FormatStackDTO(stacks);
-            var stackIDs = stacks.Select(stack => stack.StackId).ToArray();
-            var stackID = _inputHandler.GetNumericInput(stackIDs);
-            var stack = dataAccess.GetStack(stackID);
+            var stackNames = stacks.Select(stack => stack.StackName).ToArray();
+            stackNames = stackNames.Append("N").ToArray();
+            stackNames = stackNames.Append("n").ToArray();
+            var stackName = _inputHandler.GetTextInput(stackNames);
+
+            if (stackName == "N" || stackName == "n")
+            {
+                CreateStack(dataAccess);
+                return;
+            }
+
+            var stack = dataAccess.GetStack(stackName);
             InteractWithStack(stack);
         }
 
@@ -52,6 +61,13 @@ namespace Flashcards
             if (stackName == "Q")
             {
                 _menu.Show();
+                return;
+            }
+
+            if (!StackNameIsUnique(stackName))
+            {
+                Console.WriteLine($"A stack with the name '{stackName}' already exists. Please choose a different name.");
+                CreateStack(dataAccess);
                 return;
             }
 
@@ -225,6 +241,13 @@ namespace Flashcards
 
             Formatter.FormatFlashcardDTO(flashcards);
             InteractWithStack(stack);
+        }
+
+        private bool StackNameIsUnique(string stackName)
+        {
+            var dataAccess = new DataAccess();
+            var stacks = dataAccess.GetStacks();
+            return !stacks.Any(stack => stack.StackName.ToLower() == stackName.ToLower());
         }
     }
 }

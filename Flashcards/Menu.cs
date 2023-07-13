@@ -24,12 +24,11 @@ namespace Flashcards
         {
             Console.WriteLine("---------------");
             Console.WriteLine("1. Manage Stacks");
-            Console.WriteLine("2. Manage Flashcards");
-            Console.WriteLine("3. Study");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine("2. Study");
+            Console.WriteLine("3. Exit");
             Console.WriteLine("---------------");
 
-            var input = _inputHandler.GetNumericInput(new[] {1, 2, 3, 4});
+            var input = _inputHandler.GetNumericInput(new[] {1, 2, 3});
 
             switch(input)
             {
@@ -37,12 +36,9 @@ namespace Flashcards
                     _flashcardManager.ManageStacks();
                     break;
                 case 2:
-                    _flashcardManager.ManageFlashcards();
-                    break;
-                case 3:
                     _flashcardManager.Study();
                     break;
-                case 4:
+                case 3:
                     Environment.Exit(0);
                     break;
             }
