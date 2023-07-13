@@ -54,7 +54,15 @@ namespace Flashcards
                 _menu.Show();
                 return;
             }
-            
+
+            Console.WriteLine($"The new stack will be named '{stackName}'. Do you want to proceed? Y/N");
+            var confirmation = _inputHandler.GetTextInput(new[] { "Y", "N" }, true).ToUpper();
+
+            if (confirmation == "N")
+            {
+                stackName = _inputHandler.GetTextInput("\nEnter a name for the new stack, or enter Q to return to the main menu: ");
+            }
+
             dataAccess.CreateStack(stackName);
             var stack = dataAccess.GetStack(stackName);
             Console.WriteLine($"The stack '{stack.StackName}' has been created");
@@ -114,7 +122,19 @@ namespace Flashcards
 
         private void DeleteStack(StackDTO stack)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"Are you sure you want to delete this stack ({stack.StackName})? Y/N");
+            var confirmDelete = _inputHandler.GetTextInput(new string[] { "Y", "N" }, true).ToUpper() == "Y";
+
+            if (!confirmDelete)
+            {
+                InteractWithStack(stack);
+                return;
+            }
+
+            var dataAccessLayer = new DataAccess();
+            dataAccessLayer.DeleteStack(stack.StackId);
+            Console.WriteLine("Stack deleted successfully.");
+            _menu.Show();
         }
 
         private void DeleteFlashcard(StackDTO stack)
@@ -129,12 +149,35 @@ namespace Flashcards
 
         private void CreateFlashcard(StackDTO stack)
         {
-            throw new NotImplementedException();
+            var cardFront = _inputHandler.GetTextInput("\nEnter the question for the flashcard: ");
+            var cardBack = _inputHandler.GetTextInput("Enter the answer for the flashcard: ");
+            var flashCard = new FlashcardDTO
+            {
+                CardFront = cardFront,
+                CardBack = cardBack,
+            };
+
+            var dataAccess = new DataAccess();
+            dataAccess.CreateFlashcard(flashCard, stack);
+            Console.WriteLine("Flashcard created successfully.");
+
+            InteractWithStack(stack);
         }
 
         private void ViewStack(StackDTO stack)
         {
-            throw new NotImplementedException();
+            var dataAccess = new DataAccess();
+            var flashcards = dataAccess.GetCardsInStack(stack);
+
+            if (flashcards.Count < 1)
+            {
+                Console.WriteLine("There are currently no flashcards in this stack.");
+                InteractWithStack(stack);
+                return;
+            }
+
+            Formatter.FormatFlashcardDTO(flashcards);
+            InteractWithStack(stack);
         }
     }
 }

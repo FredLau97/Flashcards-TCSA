@@ -63,14 +63,6 @@ namespace Flashcards
             }
 
             if (input.ToUpper() == "Q") return "Q";
-            
-            Console.WriteLine($"The new stack will be named '{input}'. Do you want to proceed? Y/N");
-            var confirmation = GetTextInput(new[] { "Y", "N" }, true).ToUpper();
-
-            if (confirmation == "N")
-            {
-                input = GetTextInput(message);
-            }
 
             return input;
         }

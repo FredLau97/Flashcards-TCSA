@@ -37,5 +37,21 @@ namespace Flashcards
             var stack = _connection.GetStack(stackId);
             return stack;
         }
+
+        public void DeleteStack(int stackId)
+        {
+            _connection.DeleteStack(stackId);
+        }
+
+        public void CreateFlashcard(FlashcardDTO flashCard, StackDTO stack)
+        {
+            _connection.CreateFlashcard(flashCard, stack);
+        }
+
+        public List<FlashcardDTO> GetCardsInStack(StackDTO stack)
+        {
+            var cards = _connection.GetCardsInStack(stack);
+            return cards;
+        }
     }
 }

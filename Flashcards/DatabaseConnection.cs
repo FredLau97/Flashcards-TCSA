@@ -133,5 +133,43 @@ namespace Flashcards
             CloseConnection();
             return stack;
         }
+
+        // TODO: Implement this method
+        public void DeleteStack(int stackId)
+        {
+            if (!OpenConnection()) return;
+        }
+
+        public void CreateFlashcard(FlashcardDTO flashCard, StackDTO stack)
+        {
+            if (!OpenConnection()) return;
+
+            _sql = $"INSERT INTO Cards (CardFront, CardBack, StackID) VALUES ('{flashCard.CardFront}', '{flashCard.CardBack}', {stack.StackId})";
+            _cmd = new(_sql, _connection);
+            _cmd.ExecuteNonQuery();
+            CloseConnection();
+        }
+
+        public List<FlashcardDTO> GetCardsInStack(StackDTO stack)
+        {
+            if (!OpenConnection()) return null;
+
+            _sql = $"SELECT * FROM Cards WHERE StackID = {stack.StackId}";
+            _cmd = new(_sql, _connection);
+            var reader = _cmd.ExecuteReader();
+            var cards = new List<FlashcardDTO>();
+
+            while (reader.Read())
+            {
+                var cardId = reader.GetInt32(0);
+                var cardFront = reader.GetString(1);
+                var cardBack = reader.GetString(2);
+                var card = new FlashcardDTO(cardId, cardFront, cardBack);
+                cards.Add(card);
+            }
+
+            CloseConnection();
+            return cards;
+        }
     }
 }

@@ -52,5 +52,21 @@ namespace Flashcards
 
             return;
         }
+
+        public static void FormatFlashcardDTO(List<FlashcardDTO> flashcards)
+        {
+            var tableData = new List<List<Object>>();
+
+            foreach (var card in flashcards)
+            {
+                tableData.Add(new List<object> { card.FlashcardID, card.CardFront, card.CardBack });
+            }
+
+            ConsoleTableBuilder
+                .From(tableData)
+                .WithTitle("Flashcards")
+                .WithColumn("ID", "Front", "Back")
+                .ExportAndWriteLine();
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Flashcards
 {
-    internal class FlashcardDTO
+    public class FlashcardDTO
     {
         public int FlashcardID { get; set; }
         public string CardFront { get; set; }
