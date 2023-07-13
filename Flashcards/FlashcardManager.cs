@@ -139,7 +139,23 @@ namespace Flashcards
 
         private void DeleteFlashcard(StackDTO stack)
         {
-            throw new NotImplementedException();
+            var flashcardsInStack = GetFlashcards(stack);
+            var flashcardIDs = flashcardsInStack.Select(flashcard => flashcard.FlashcardID).ToArray();
+            Console.WriteLine("Which flashcard (ID) would you like to delete?");
+            var flashcardID = _inputHandler.GetNumericInput(flashcardIDs);
+            Console.WriteLine($"Are you sure you want to delete this flashcard ({flashcardID})? Y/N");
+            var confirmDelete = _inputHandler.GetTextInput(new string[] { "Y", "N" }, true).ToUpper() == "Y";
+
+            if (!confirmDelete)
+            {
+                InteractWithStack(stack);
+                return;
+            }
+
+            var dataAccess = new DataAccess();
+            dataAccess.DeleteFlashcard(flashcardID);
+            Console.WriteLine("Flashcard deleted successfully.");
+            InteractWithStack(stack);
         }
 
         private void EditFlashcard(StackDTO stack)
@@ -152,6 +168,7 @@ namespace Flashcards
             flashcard.FlashcardID = flashcardID;
             var dataAccess = new DataAccess();
             dataAccess.EditFlashcard(flashcard);
+            Console.WriteLine("Flashcard has been changed.");
             InteractWithStack(stack);
         }
 

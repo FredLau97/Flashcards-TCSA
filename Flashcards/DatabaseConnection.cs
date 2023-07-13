@@ -181,5 +181,15 @@ namespace Flashcards
             _cmd.ExecuteNonQuery();
             CloseConnection();
         }
+
+        public void DeleteFlashcard(int flashcardID)
+        {
+            if (!OpenConnection()) return;
+
+            _sql = $"DELETE FROM Cards WHERE CardID = {flashcardID}";
+            _cmd = new(_sql, _connection);
+            _cmd.ExecuteNonQuery();
+            CloseConnection();
+        }
     }
 }

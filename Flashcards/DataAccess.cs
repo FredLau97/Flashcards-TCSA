@@ -54,9 +54,14 @@ namespace Flashcards
             return cards;
         }
 
-        internal void EditFlashcard(FlashcardDTO flashcard)
+        public void EditFlashcard(FlashcardDTO flashcard)
         {
             _connection.EditFlashcard(flashcard);
+        }
+
+        public void DeleteFlashcard(int flashcardID)
+        {
+            _connection.DeleteFlashcard(flashcardID);
         }
     }
 }
