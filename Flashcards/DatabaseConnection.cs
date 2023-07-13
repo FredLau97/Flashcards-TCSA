@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace Flashcards
 {
@@ -105,6 +106,26 @@ namespace Flashcards
             while (reader.Read())
             {
                 var stackId = reader.GetInt32(0);
+                stack.StackId = stackId;
+                stack.StackName = stackName;
+            }
+
+            CloseConnection();
+            return stack;
+        }
+
+        public StackDTO GetStack(int stackId)
+        {
+            if (!OpenConnection()) return null;
+
+            _sql = $"SELECT * FROM Stacks WHERE StackID = {stackId}";
+            _cmd = new(_sql, _connection);
+            var reader = _cmd.ExecuteReader();
+            var stack = new StackDTO();
+
+            while (reader.Read())
+            {
+                var stackName = reader.GetString(1);
                 stack.StackId = stackId;
                 stack.StackName = stackName;
             }

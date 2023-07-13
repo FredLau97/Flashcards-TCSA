@@ -36,7 +36,7 @@ namespace Flashcards
 
             foreach (var stack in stacks)
             {
-                tableData.Add(new List<object> { stack.StackName });
+                tableData.Add(new List<object> { stack.StackId, stack.StackName });
             }
 
             if (tableData.Count > 0)
@@ -44,6 +44,7 @@ namespace Flashcards
                 ConsoleTableBuilder
                     .From(tableData)
                     .WithTitle("Stacks")
+                    .WithColumn("ID", "Name")
                     .ExportAndWriteLine();
 
                 return;

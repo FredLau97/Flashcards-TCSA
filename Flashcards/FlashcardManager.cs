@@ -38,11 +38,11 @@ namespace Flashcards
                 return;
             }
 
-            Console.WriteLine("Which stack would you like to interact with?");
+            Console.WriteLine("Which stack (ID) would you like to interact with?");
             Formatter.FormatStackDTO(stacks);
-            var stackNames = stacks.Select(stack => stack.StackName).ToArray();
-            var stackName = _inputHandler.GetTextInput(stackNames);
-            var stack = dataAccess.GetStack(stackName);
+            var stackIDs = stacks.Select(stack => stack.StackId).ToArray();
+            var stackID = _inputHandler.GetNumericInput(stackIDs);
+            var stack = dataAccess.GetStack(stackID);
             InteractWithStack(stack);
         }
 
@@ -84,7 +84,7 @@ namespace Flashcards
             Console.WriteLine("A to delete the stack");
             Console.WriteLine("---------------");
 
-            var input = _inputHandler.GetTextInput(new[] { "R", "X", "V", "C", "E", "D", "A" });
+            var input = _inputHandler.GetTextInput(new[] { "R", "X", "V", "C", "E", "D", "A" }, true);
             switch(input)
             {
                 case "R":

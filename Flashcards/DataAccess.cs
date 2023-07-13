@@ -31,5 +31,11 @@ namespace Flashcards
             var stack = _connection.GetStack(stackName);
             return stack;
         }
+
+        public StackDTO GetStack(int stackId)
+        {
+            var stack = _connection.GetStack(stackId);
+            return stack;
+        }
     }
 }
