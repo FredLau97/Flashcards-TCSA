@@ -22,7 +22,7 @@ namespace Flashcards
             // Check if the input is a valid number, and if not, ask again
             while (!int.TryParse(input, out int result) || !validOptions.Contains(result))
             {
-                Console.WriteLine($"Input '{input}' is not valid in this context. Please select either of these inputs: {FormatInputCollection(validOptions)}");
+                Console.WriteLine($"Input '{input}' is not valid in this context. Please select either of these inputs: {Formatter.FormatInputCollection(validOptions)}");
                 input = GetNumericInput(validOptions).ToString();
             }
 
@@ -30,23 +30,49 @@ namespace Flashcards
         }
 
         /// <summary>
-        /// Formats a collection into a string containing each object.
-        /// E.g. [1, 2, 3] => "1, 2, 3"]
+        /// Gets a string input from the user, and returns it
         /// </summary>
-        /// <param name="collection">The collection to format</param>
-        /// <returns>A formatted string of the collection</returns>
-        private string FormatInputCollection(Array collection)
+        /// <param name="validOptions">A string[] of valid inputs</param>
+        /// <returns>The input of the user</returns>
+        public string GetTextInput(string[] validOptions, bool isCapital = false)
         {
-            var sb = new StringBuilder();
+            Console.Write("Enter your choice: ");
+            var input = Console.ReadLine();
 
-            foreach (var option in collection)
+            if (isCapital) input = input.ToUpper();
+
+            // Check if the input is a valid number, and if not, ask again
+            while (!validOptions.Contains(input))
             {
-                sb.Append($"{option}, ");
+                Console.WriteLine($"Input '{input}' is not valid in this context. Please select either of these inputs: {Formatter.FormatInputCollection(validOptions)}");
+                input = GetTextInput(validOptions).ToString();
             }
 
-            sb.Remove(sb.Length - 2, 2);
+            return input;
+        }
 
-            return sb.ToString();
+        public string GetTextInput(string message)
+        {
+            Console.Write(message);
+            var input = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(input))
+            {
+                Console.WriteLine("Input cannot be empty. Please try again.\n");
+                input = GetTextInput(message);
+            }
+
+            if (input.ToUpper() == "Q") return "Q";
+            
+            Console.WriteLine($"The new stack will be named '{input}'. Do you want to proceed? Y/N");
+            var confirmation = GetTextInput(new[] { "Y", "N" }, true).ToUpper();
+
+            if (confirmation == "N")
+            {
+                input = GetTextInput(message);
+            }
+
+            return input;
         }
     }
 }

@@ -8,5 +8,28 @@ namespace Flashcards
 {
     internal class DataAccess
     {
+        private DatabaseConnection _connection;
+
+        public DataAccess()
+        {
+            _connection = new();
+        }
+
+        public List<StackDTO> GetStacks()
+        {
+            var stacks = _connection.GetStacks();
+            return stacks;
+        }
+
+        public void CreateStack(string stackName)
+        {
+            _connection.CreateStack(stackName);
+        }
+
+        public StackDTO GetStack(string stackName)
+        {
+            var stack = _connection.GetStack(stackName);
+            return stack;
+        }
     }
 }

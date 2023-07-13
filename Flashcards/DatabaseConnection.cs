@@ -10,6 +10,7 @@ namespace Flashcards
         private SqlConnection _connection;
         private SqlCommand _cmd;
         private SqlDataAdapter _adapter;
+        private string _sql;
 
         public DatabaseConnection()
         {
@@ -29,14 +30,13 @@ namespace Flashcards
                 if (_connection.State == ConnectionState.Closed)
                 {
                     _connection.Open();
-                    Console.WriteLine("Connection to database established");
+                    // Console.WriteLine("Connection to database established");
                     return true;
                 }
             }
             catch (SqlException e)
             {
-                Console.WriteLine($"Connection to database failed...\n" +
-                    $"Error: {e.Message}");
+                //Console.WriteLine($"Connection to database failed...\n" + $"Error: {e.Message}");
             }
 
             return false;
@@ -49,17 +49,68 @@ namespace Flashcards
                 if (_connection.State == ConnectionState.Open)
                 {
                     _connection.Close();
-                    Console.WriteLine("Connection to database closed");
+                    // Console.WriteLine("Connection to database closed");
                     return true;
                 }
             }
             catch (SqlException e)
             {
-                Console.WriteLine($"Connection to database failed to close...\n" +
-                                       $"Error: {e.Message}");
+                //Console.WriteLine($"Connection to database failed to close...\n" + $"Error: {e.Message}");
             }
 
             return false;
+        }
+
+        public List<StackDTO> GetStacks()
+        {
+            if (!OpenConnection()) return null;
+
+            _sql = "SELECT * FROM Stacks";
+            _cmd = new(_sql, _connection);
+            var stacks = new List<StackDTO>();
+            var reader = _cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var stackId = reader.GetInt32(0);
+                var stackName = reader.GetString(1);
+                var stack = new StackDTO(stackId, stackName);
+                stacks.Add(stack);
+            }
+
+            CloseConnection();
+            return stacks;
+        }
+
+        public void CreateStack(string stackName)
+        {
+            if (!OpenConnection()) return;
+
+            _sql = $"INSERT INTO Stacks (StackName) VALUES ('{stackName}')";
+            _cmd = new(_sql, _connection);
+            _cmd.ExecuteNonQuery();
+
+            CloseConnection();
+        }
+
+        public StackDTO GetStack(string stackName)
+        {
+            if (!OpenConnection()) return null;
+
+            _sql = $"SELECT * FROM Stacks WHERE StackName = '{stackName}'";
+            _cmd = new(_sql, _connection);
+            var reader = _cmd.ExecuteReader();
+            var stack = new StackDTO();
+
+            while (reader.Read())
+            {
+                var stackId = reader.GetInt32(0);
+                stack.StackId = stackId;
+                stack.StackName = stackName;
+            }
+
+            CloseConnection();
+            return stack;
         }
     }
 }
