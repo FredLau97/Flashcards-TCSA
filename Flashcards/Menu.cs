@@ -15,13 +15,11 @@ namespace Flashcards
         {
             _inputHandler = new();
             _flashcardManager = new(_inputHandler, this);
-
-            Console.WriteLine("Welcome to the Flashcards App!");
-            Show();
         }
 
         public void Show()
         {
+            Console.WriteLine("Welcome to the Flashcards App!");
             Console.WriteLine("---------------");
             Console.WriteLine("1. Manage Stacks");
             Console.WriteLine("2. Study");
