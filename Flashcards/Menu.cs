@@ -26,6 +26,8 @@ namespace Flashcards
             Console.WriteLine("3. Practice");
             Console.WriteLine("4. Exit");
             Console.WriteLine("---------------");
+
+            var input = _inputHandler.GetNumericInput(new[] {1, 2, 3, 4});
         }
     }
 }
