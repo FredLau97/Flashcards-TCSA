@@ -8,10 +8,10 @@ namespace Flashcards
 {
     public class FlashcardDTO
     {
-        public int DisplayID { get; set; }
-        public int FlashcardID { get; set; }
-        public string CardFront { get; set; }
-        public string CardBack { get; set; }
+        public int DisplayID { get; set; } // The ID of the flashcard to display. This is not the same as the FlashcardID.
+        public int FlashcardID { get; set; } // The ID of the flashcard in the database.
+        public string CardFront { get; set; } // The front of the flashcard. This is the question.
+        public string CardBack { get; set; } // The back of the flashcard. This is the answer.
 
         public FlashcardDTO() { }
 

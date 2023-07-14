@@ -62,6 +62,10 @@ namespace Flashcards
             return false;
         }
 
+        /// <summary>
+        /// Get all stacks from the database, and return them as a list of StackDTOs
+        /// </summary>
+        /// <returns></returns>
         public List<StackDTO> GetStacks()
         {
             if (!OpenConnection()) return null;
@@ -83,6 +87,10 @@ namespace Flashcards
             return stacks;
         }
 
+        /// <summary>
+        /// Creates a new stack in the database
+        /// </summary>
+        /// <param name="stackName">The name of the stack</param>
         public void CreateStack(string stackName)
         {
             if (!OpenConnection()) return;
@@ -94,6 +102,11 @@ namespace Flashcards
             CloseConnection();
         }
 
+        /// <summary>
+        /// Get a stack from the database by its name
+        /// </summary>
+        /// <param name="stackName">The name of the stack</param>
+        /// <returns></returns>
         public StackDTO GetStack(string stackName)
         {
             if (!OpenConnection()) return null;
@@ -114,6 +127,11 @@ namespace Flashcards
             return stack;
         }
 
+        /// <summary>
+        /// Get a stack from the database by its ID
+        /// </summary>
+        /// <param name="stackId">The ID of the stack</param>
+        /// <returns></returns>
         public StackDTO GetStack(int stackId)
         {
             if (!OpenConnection()) return null;
@@ -134,6 +152,10 @@ namespace Flashcards
             return stack;
         }
 
+        /// <summary>
+        /// Deletes a stack from the database by its ID
+        /// </summary>
+        /// <param name="stackId">The ID of the stack</param>
         public void DeleteStack(int stackId)
         {
             if (!OpenConnection()) return;
@@ -145,6 +167,10 @@ namespace Flashcards
             CloseConnection();
         }
 
+        /// <summary>
+        /// Deletes all cards in a stack from the database by the stackID
+        /// </summary>
+        /// <param name="stackId">The ID of the stack</param>
         private void DeleteCardsInStack(int stackId)
         {
             _sql = $"DELETE FROM Cards WHERE StackID = {stackId}";
@@ -152,6 +178,11 @@ namespace Flashcards
             _cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Creates a new flashcard in the database
+        /// </summary>
+        /// <param name="flashCard">The FlashcardDTO</param>
+        /// <param name="stack">The StackDTO</param>
         public void CreateFlashcard(FlashcardDTO flashCard, StackDTO stack)
         {
             if (!OpenConnection()) return;
@@ -162,6 +193,11 @@ namespace Flashcards
             CloseConnection();
         }
 
+        /// <summary>
+        /// Gets all flashcards in a stack from the database
+        /// </summary>
+        /// <param name="stack">The StackDTO</param>
+        /// <returns></returns>
         public List<FlashcardDTO> GetCardsInStack(StackDTO stack)
         {
             if (!OpenConnection()) return null;
@@ -186,6 +222,10 @@ namespace Flashcards
             return cards;
         }
 
+        /// <summary>
+        /// Edits a flashcard in the database
+        /// </summary>
+        /// <param name="flashcard">The edited FlashcardDTO</param>
         public void EditFlashcard(FlashcardDTO flashcard)
         {
             if (!OpenConnection()) return;
@@ -196,6 +236,10 @@ namespace Flashcards
             CloseConnection();
         }
 
+        /// <summary>
+        /// Deletes a flashcard from the database by its ID
+        /// </summary>
+        /// <param name="flashcardID">The flashcard ID</param>
         public void DeleteFlashcard(int flashcardID)
         {
             if (!OpenConnection()) return;
@@ -206,6 +250,10 @@ namespace Flashcards
             CloseConnection();
         }
 
+        /// <summary>
+        /// Gets all study sessions from the database
+        /// </summary>
+        /// <returns>A list of StudySessionDTOs</returns>
         public List<StudySessionDTO> GetStudySessions()
         {
             if (!OpenConnection()) return null;
@@ -229,6 +277,10 @@ namespace Flashcards
             return studySessions;
         }
 
+        /// <summary>
+        /// Creates a new study session in the database
+        /// </summary>
+        /// <param name="studySession">The StudySessionDTO</param>
         public void CreateStudySession(StudySessionDTO studySession)
         {
             if (!OpenConnection()) return;

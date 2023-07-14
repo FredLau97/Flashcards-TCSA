@@ -17,6 +17,9 @@ namespace Flashcards
             _flashcardManager = new(_inputHandler, this);
         }
 
+        /// <summary>
+        /// Displays the main menu and handles user input.
+        /// </summary>
         public void Show()
         {
             Console.WriteLine("Welcome to the Flashcards App!");

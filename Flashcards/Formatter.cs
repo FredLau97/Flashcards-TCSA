@@ -30,6 +30,10 @@ namespace Flashcards
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Formats the stacks into a table for the user to see.
+        /// </summary>
+        /// <param name="stacks">List of StackDTO to display.</param>
         public static void FormatStackDTO(List<StackDTO> stacks)
         {
             var tableData = new List<List<Object>>();
@@ -53,6 +57,10 @@ namespace Flashcards
             return;
         }
 
+        /// <summary>
+        /// Formats the flashcards into a table for the user to see.
+        /// </summary>
+        /// <param name="flashcards">List of FlashcardDTO to display.</param>
         public static void FormatFlashcardDTO(List<FlashcardDTO> flashcards)
         {
             var tableData = new List<List<Object>>();
@@ -69,6 +77,10 @@ namespace Flashcards
                 .ExportAndWriteLine();
         }
 
+        /// <summary>
+        /// Formats the study sessions into a table for the user to see.
+        /// </summary>
+        /// <param name="studySessions">List of StudySessionDTO to display</param>
         public static void FormatStudySessions(List<StudySessionDTO> studySessions)
         {
             var tableData = new List<List<Object>>();

@@ -51,6 +51,13 @@ namespace Flashcards
             return input;
         }
 
+        /// <summary>
+        /// Gets a string input from the user, and returns it.
+        /// Takes a message as parameter to display to the user.
+        /// The user can freely input anything, but if the input is empty, the user will be asked again.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns>The input of the user</returns>
         public string GetTextInput(string message)
         {
             Console.Write(message);

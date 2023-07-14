@@ -11,7 +11,7 @@ namespace Flashcards
     {
         private InputHandler _inputHandler;
         private Menu _menu;
-        private int pointsPerCard = 10;
+        private int pointsPerCard = 10; // The number of points a user can earn for correctly answering a flashcard
 
         public FlashcardManager(InputHandler inputHandler, Menu menu)
         {
@@ -19,6 +19,10 @@ namespace Flashcards
             _menu = menu;
         }
 
+        /// <summary>
+        /// Enables the user to interact with a stack of flashcards.
+        /// If there are no flashcards in the stack, the user will be prompted to create a new flashcard.
+        /// </summary>
         public void ManageStacks()
         {
             var dataAccess = new DataAccess();
@@ -57,6 +61,10 @@ namespace Flashcards
             InteractWithStack(stack);
         }
 
+        /// <summary>
+        /// Prompts the user for the name of a new stack, and creates it.
+        /// </summary>
+        /// <param name="dataAccess"></param>
         private void CreateStack(DataAccess dataAccess)
         {
             var stackName = _inputHandler.GetTextInput("\nEnter a name for the new stack, or enter Q to return to the main menu: ");
@@ -87,6 +95,9 @@ namespace Flashcards
             InteractWithStack(stack);
         }
 
+        /// <summary>
+        /// Enables the user to interact with the study interface.
+        /// </summary>
         public void Study()
         {
             Console.WriteLine("---------------");
@@ -111,6 +122,10 @@ namespace Flashcards
             }
         }
 
+        /// <summary>
+        /// Displays all study sessions in the database.
+        /// If there are no study sessions, the user will be prompted to create a new study session.
+        /// </summary>
         private void ViewStudySessions()
         {
             var dataAccess = new DataAccess();
@@ -134,6 +149,10 @@ namespace Flashcards
             Study();
         }
 
+        /// <summary>
+        /// Prompts the user to create a new study session.
+        /// User is prompted to select a stack to study, and then the study session begins.
+        /// </summary>
         private void CreateStudySession()
         {
             var dataAccess = new DataAccess();
@@ -158,6 +177,14 @@ namespace Flashcards
 
         }
 
+        /// <summary>
+        /// Takes a list of flashcards and a study session, and enables the user to study the flashcards.
+        /// and asks the user if they got the card right, and awards points accordingly.
+        /// Allows the user to view the answer before moving on to the next card.
+        /// Asks the user if they want to save the session when they are done.
+        /// </summary>
+        /// <param name="cardsToStudy"></param>
+        /// <param name="studySession"></param>
         private void StudyStack(List<FlashcardDTO> cardsToStudy, ref StudySessionDTO studySession)
         {
             foreach(var card in cardsToStudy)
@@ -188,6 +215,10 @@ namespace Flashcards
             Study();
         }
 
+        /// <summary>
+        /// Enables the user to interact with a stack.
+        /// </summary>
+        /// <param name="stack"></param>
         private void InteractWithStack(StackDTO stack)
         {
             Console.WriteLine("---------------");
@@ -229,6 +260,10 @@ namespace Flashcards
             }
         }
 
+        /// <summary>
+        /// Deletes a stack from the database. Asks the user to confirm the deletion.
+        /// </summary>
+        /// <param name="stack"></param>
         private void DeleteStack(StackDTO stack)
         {
             Console.WriteLine($"Are you sure you want to delete this stack ({stack.StackName})? Y/N");
@@ -246,6 +281,10 @@ namespace Flashcards
             _menu.Show();
         }
 
+        /// <summary>
+        /// Deletes a flashcard from the database. Asks the user to confirm the deletion.
+        /// </summary>
+        /// <param name="stack"></param>
         private void DeleteFlashcard(StackDTO stack)
         {
             var flashcardsInStack = GetFlashcards(stack);
@@ -267,6 +306,10 @@ namespace Flashcards
             InteractWithStack(stack);
         }
 
+        /// <summary>
+        /// Prompts the user to enter the data for to edit the flashcard, and creates it in the database.
+        /// </summary>
+        /// <param name="stack"></param>
         private void EditFlashcard(StackDTO stack)
         {
             var flashcardsInStack = GetFlashcards(stack);
@@ -282,6 +325,11 @@ namespace Flashcards
             InteractWithStack(stack);
         }
 
+        /// <summary>
+        /// Displays all flashcards in a stack, and returns them as a list.
+        /// </summary>
+        /// <param name="stack"></param>
+        /// <returns></returns>
         private List<FlashcardDTO> GetFlashcards(StackDTO stack)
         {
             var dataAccess = new DataAccess();
@@ -298,6 +346,10 @@ namespace Flashcards
             return flashcardsInStack;
         }
 
+        /// <summary>
+        /// Prompts the user to enter the data for a new flashcard, and creates it in the database.
+        /// </summary>
+        /// <param name="stack"></param>
         private void CreateFlashcard(StackDTO stack)
         {
             var flashCard = CreateFlashcardData();
@@ -309,6 +361,10 @@ namespace Flashcards
             InteractWithStack(stack);
         }
 
+        /// <summary>
+        /// Creates a new flashcard object from user input.
+        /// </summary>
+        /// <returns></returns>
         private FlashcardDTO CreateFlashcardData()
         {
             var cardFront = _inputHandler.GetTextInput("\nEnter the question for the flashcard: ");
@@ -321,6 +377,10 @@ namespace Flashcards
             return flashCard;
         }
 
+        /// <summary>
+        /// Displays all stacks in the database.
+        /// </summary>
+        /// <param name="stack"></param>
         private void ViewStack(StackDTO stack)
         {
             var dataAccess = new DataAccess();
@@ -337,6 +397,11 @@ namespace Flashcards
             InteractWithStack(stack);
         }
 
+        /// <summary>
+        /// Check if the stack name is unique.
+        /// </summary>
+        /// <param name="stackName"></param>
+        /// <returns></returns>
         private bool StackNameIsUnique(string stackName)
         {
             var dataAccess = new DataAccess();
