@@ -205,5 +205,38 @@ namespace Flashcards
             _cmd.ExecuteNonQuery();
             CloseConnection();
         }
+
+        public List<StudySessionDTO> GetStudySessions()
+        {
+            if (!OpenConnection()) return null;
+
+            _sql = "SELECT * FROM StudySession";
+            _cmd = new(_sql, _connection);
+            var reader = _cmd.ExecuteReader();
+            var studySessions = new List<StudySessionDTO>();
+
+            while (reader.Read())
+            {
+                var studyDate = reader.GetDateTime(1).ToString("dd-MM-yyyy");
+                var studyStack = reader.GetString(2);
+                var maxPoints = reader.GetInt32(3);
+                var gainedPoints = reader.GetInt32(4);
+                var studySession = new StudySessionDTO(studyDate, studyStack, maxPoints, gainedPoints);
+                studySessions.Add(studySession);
+            }
+
+            CloseConnection();
+            return studySessions;
+        }
+
+        public void CreateStudySession(StudySessionDTO studySession)
+        {
+            if (!OpenConnection()) return;
+
+            _sql = $"INSERT INTO StudySession (Date, StackName, MaxPoints, PointsGained) VALUES ('{studySession.Date}', '{studySession.StudyStack}', {studySession.MaxPoints}, {studySession.PointsGained})";
+            _cmd = new(_sql, _connection);
+            _cmd.ExecuteNonQuery();
+            CloseConnection();
+        }
     }
 }

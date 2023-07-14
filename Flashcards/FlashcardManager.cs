@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace Flashcards
     {
         private InputHandler _inputHandler;
         private Menu _menu;
+        private int pointsPerCard = 10;
 
         public FlashcardManager(InputHandler inputHandler, Menu menu)
         {
@@ -85,14 +87,105 @@ namespace Flashcards
             InteractWithStack(stack);
         }
 
-        public void ManageFlashcards()
-        {
-            Console.WriteLine("Manage Flashcards");
-        }
-
         public void Study()
         {
-            Console.WriteLine("Study");
+            Console.WriteLine("---------------");
+            Console.WriteLine("What would you like to do?");
+            Console.WriteLine("R to return to the main menu");
+            Console.WriteLine("C to create a new study session");
+            Console.WriteLine("V to view all study sessions");
+            Console.WriteLine("---------------");
+
+            var input = _inputHandler.GetTextInput(new[] { "R", "C", "V" }, true);
+            switch(input)
+            {
+                case "R":
+                    _menu.Show();
+                    break;
+                case "C":
+                    CreateStudySession();
+                    break;
+                case "V":
+                    ViewStudySessions();
+                    break;
+            }
+        }
+
+        private void ViewStudySessions()
+        {
+            var dataAccess = new DataAccess();
+            var studySessions = dataAccess.GetStudySessions();
+
+            if (studySessions.Count == 0)
+            {
+                Console.WriteLine("There are currently no study sessions to view.");
+                Console.WriteLine("Would you like to create a new study session? Y/N");
+                var input = _inputHandler.GetTextInput(new[] { "Y", "N" }, true);
+                if (input == "Y")
+                {
+                    CreateStudySession();
+                    return;
+                }
+                _menu.Show();
+                return;
+            }
+
+            Formatter.FormatStudySessions(studySessions);
+            Study();
+        }
+
+        private void CreateStudySession()
+        {
+            var dataAccess = new DataAccess();
+            var stacks = dataAccess.GetStacks();
+            var stackNames = stacks.Select(stack => stack.StackName).ToArray();
+            Formatter.FormatStackDTO(stacks);
+            Console.WriteLine("\nWhich stack would you like to study?");
+            var stackName = _inputHandler.GetTextInput(stackNames);
+            var stack = stacks.Where(stack => stack.StackName == stackName).FirstOrDefault();
+            // Store today date as a DateTime so that it can be stored in SQL DateTime format
+            var date = DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss");
+            var cardsInStack = dataAccess.GetCardsInStack(stack);
+            var maxPoints = cardsInStack.Count * pointsPerCard;
+            var studySession = new StudySessionDTO()
+            {
+                StudyStack = stackName,
+                Date = date,
+                MaxPoints = maxPoints
+            };
+
+            StudyStack(cardsInStack, ref studySession);
+
+        }
+
+        private void StudyStack(List<FlashcardDTO> cardsToStudy, ref StudySessionDTO studySession)
+        {
+            foreach(var card in cardsToStudy)
+            {
+                Console.WriteLine($"---------------\n{card.CardFront}\n---------------");
+                Console.WriteLine("Press enter to reveal the answer");
+                Console.ReadLine();
+                Console.WriteLine($"---------------\n{card.CardBack}\n---------------");
+                Console.WriteLine("Did you get it right? Y/N");
+                var input = _inputHandler.GetTextInput(new[] { "Y", "N" }, true);
+                if (input == "Y")
+                {
+                    studySession.PointsGained += pointsPerCard;
+                }
+            }
+
+            Console.WriteLine($"You have finished studying the stack {studySession.StudyStack}.");
+            Console.WriteLine($"You earned {studySession.PointsGained} out of {studySession.MaxPoints} points.");
+            Console.WriteLine("Would you like to save this study session? Y/N");
+            var save = _inputHandler.GetTextInput(new[] { "Y", "N" }, true);
+            if (save == "Y")
+            {
+                var dataAccess = new DataAccess();
+                dataAccess.CreateStudySession(studySession);
+                Console.WriteLine("Study session saved.");
+            }
+            
+            Study();
         }
 
         private void InteractWithStack(StackDTO stack)

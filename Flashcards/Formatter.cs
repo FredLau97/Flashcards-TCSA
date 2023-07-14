@@ -68,5 +68,21 @@ namespace Flashcards
                 .WithColumn("ID", "Front", "Back")
                 .ExportAndWriteLine();
         }
+
+        public static void FormatStudySessions(List<StudySessionDTO> studySessions)
+        {
+            var tableData = new List<List<Object>>();
+
+            foreach (var session in studySessions)
+            {
+                tableData.Add(new List<object> { session.Date, session.StudyStack, session.MaxPoints, session.PointsGained });
+            }
+
+            ConsoleTableBuilder
+                .From(tableData)
+                .WithTitle("Study Sessions")
+                .WithColumn("Date", "Studied Stack", "Max Points", "Points Earned")
+                .ExportAndWriteLine();
+        }
     }
 }

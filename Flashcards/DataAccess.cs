@@ -63,5 +63,16 @@ namespace Flashcards
         {
             _connection.DeleteFlashcard(flashcardID);
         }
+
+        public List<StudySessionDTO> GetStudySessions()
+        {
+            var studySessions = _connection.GetStudySessions();
+            return studySessions;
+        }
+
+        public void CreateStudySession(StudySessionDTO studySession)
+        {
+            _connection.CreateStudySession(studySession);
+        }
     }
 }
